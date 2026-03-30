@@ -1,32 +1,84 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Employee Management</title>
+    <title>Employee Management System</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+        }
+
+        button {
+            padding: 10px;
+            margin: 5px 2px;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background: #007bff;
+            color: white;
+        }
+
+        #msg {
+            color: green;
+        }
+    </style>
 </head>
+
 <body>
 
-<h2>Add Employee</h2>
+<div class="container">
 
-<input type="text" id="employeeId" placeholder="Employee ID"><br>
-<input type="text" id="name" placeholder="Name"><br>
-<input type="text" id="department" placeholder="Department"><br>
-<input type="text" id="salary" placeholder="Salary"><br>
+    <h2>Employee Management System</h2>
 
-<button onclick="saveEmployee()">Save</button>
+    <input type="text" id="employeeId" placeholder="Employee ID">
+    <input type="text" id="name" placeholder="Name">
+    <input type="text" id="department" placeholder="Department">
+    <input type="text" id="salary" placeholder="Salary">
 
-<p id="msg"></p>
+    <button onclick="saveEmployee()">Save</button>
+    <button onclick="updateEmployee()">Update</button>
+    <button onclick="deleteEmployee()">Delete</button>
+    <button onclick="getEmployees()">Load Employees</button>
 
-<h2>All Employees</h2>
-<button onclick="getEmployees()">Load Employees</button>
+    <p id="msg"></p>
 
-<table border="1" id="table">
-<tr>
-<th>ID</th>
-<th>Name</th>
-<th>Department</th>
-<th>Salary</th>
-</tr>
-</table>
+    <table id="table">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Salary</th>
+        </tr>
+    </table>
+
+</div>
 
 <script src="scripts.js"></script>
 
