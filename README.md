@@ -7,12 +7,15 @@ A fully serverless web application to manage employee data using **AWS Lambda, A
 #  Architecture
 
 Frontend (HTML/JS - S3)
+
 ⬇
 
 API Gateway (REST API)
+
 ⬇
 
 Lambda Functions (GET & POST)
+
 ⬇
 
 DynamoDB (employeeData)
