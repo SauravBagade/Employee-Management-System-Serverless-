@@ -1,23 +1,22 @@
-#  Employee Management System (AWS Serverless)
+#  Employee Management System (AWS Serverless - FULL CRUD)
 
-A fully serverless web application to manage employee data using **AWS Lambda, API Gateway, DynamoDB, and S3 Static Website Hosting**.
+A fully serverless web application to perform **CRUD operations (Create, Read, Update, Delete)** on employee data using:
+
+* AWS Lambda
+* API Gateway
+* DynamoDB
+* S3 Static Website Hosting
 
 ---
 
 #  Architecture
 
 Frontend (HTML/JS - S3)
-
 ⬇
-
 API Gateway (REST API)
-
 ⬇
-
-Lambda Functions (GET & POST)
-
+Lambda Functions (CRUD)
 ⬇
-
 DynamoDB (employeeData)
 
 ---
@@ -27,18 +26,18 @@ DynamoDB (employeeData)
 * AWS Lambda
 * Amazon API Gateway
 * Amazon DynamoDB
-* Amazon S3 (Static Hosting)
+* Amazon S3
 * IAM (Roles & Permissions)
 
 ---
 
 #  Step 1: Create DynamoDB Table
 
-1. Go to AWS Console → DynamoDB
+1. Go to **AWS Console → DynamoDB**
 
 2. Click **Create Table**
 
-3. Enter details:
+3. Enter:
 
    * Table Name: `employeeData`
    * Partition Key: `employeeId` (String)
@@ -49,14 +48,14 @@ DynamoDB (employeeData)
 
 #  Step 2: Create IAM Role for Lambda
 
-1. Go to IAM → Roles → Create Role
+1. Go to **IAM → Roles → Create Role**
 
 2. Select:
 
    * Trusted Entity: AWS Service
    * Use Case: Lambda
 
-3. Attach Permissions:
+3. Attach Policies:
 
    * AmazonDynamoDBFullAccess
    * AWSLambdaBasicExecutionRole
@@ -71,81 +70,90 @@ DynamoDB (employeeData)
 
 ---
 
-##  1. Insert Employee Data (POST)
+##  1. Create Employee (POST)
 
-1. Go to Lambda → Create Function
+* Function Name: `insertEmployeeData`
+* Runtime: Python 3.x
+* Role: `Lambda-DynamoDB-Role`
 
-2. Select **Author from scratch**
-
-   * Function Name: `insertEmployeeData`
-   * Runtime: Python 3.x
-   * Permissions: Use existing role → `Lambda-DynamoDB-Role`
-
-3. Click **Create Function**
-
-4. Paste code from `insertEmployeeData.py`
-
-5. Click **Deploy**
+ Upload code from: `insertEmployeeData.py`
+ Click **Deploy**
 
 ---
 
-##  2. Get Employee Data (GET)
+##  2. Get Employees (GET)
 
-1. Go to Lambda → Create Function
+* Function Name: `getEmployees`
 
-2. Select **Author from scratch**
+ Upload code from: `getEmployees.py`
+ Deploy
 
-   * Function Name: `getEmployees`
-   * Runtime: Python 3.x
-   * Permissions: Use existing role → `Lambda-DynamoDB-Role`
+---
 
-3. Click **Create Function**
+##  3. Update Employee (PUT)
 
-4. Paste code from `getEmployees.py`
+* Function Name: `updateEmployee`
 
-5. Click **Deploy**
+ Upload code from: `updateEmployee.py`
+ Deploy
+
+---
+
+##  4. Delete Employee (DELETE)
+
+* Function Name: `deleteEmployee`
+
+ Upload code from: `deleteEmployee.py`
+ Deploy
 
 ---
 
 #  Step 4: Create API Gateway
 
-1. Go to API Gateway → Create API
-2. Select **REST API → Build**
+1. Go to **API Gateway → Create API**
+2. Choose **REST API → Build**
 3. API Name: `employee-api`
 4. Click **Create API**
 
 ---
 
-##  Create POST Method
+##  Add Methods
 
-1. Select **Resources → Actions → Create Method → POST**
-2. Integration Type: Lambda
-3. Select `insertEmployeeData`
-4. Save & Test
+| Method | Lambda             |
+| ------ | ------------------ |
+| POST   | insertEmployeeData |
+| GET    | getEmployees       |
+| PUT    | updateEmployee     |
+| DELETE | deleteEmployee     |
+
+### Steps:
+
+1. Select **Resources → Actions → Create Method**
+2. Choose method (POST/GET/PUT/DELETE)
+3. Integration Type: **Lambda**
+4. Select respective Lambda
+5. Click **Save**
 
 ---
 
-##  Create GET Method
+#  Step 5: Enable CORS
 
-1. Select **Resources → Actions → Create Method → GET**
-2. Integration Type: Lambda
-3. Select `getEmployees`
-4. Save & Test
+1. Select resource `/`
 
----
-
-##  Enable CORS
-
-1. Select Resource `/`
 2. Click **Actions → Enable CORS**
-3. Apply for:
+
+3. Enable for:
 
    * GET
    * POST
+   * PUT
+   * DELETE
+
+4. Confirm changes
 
 ---
 
-#  Step 5: Deploy API
+#  Step 6: Deploy API
 
 1. Click **Actions → Deploy API**
 2. Stage Name: `dev`
@@ -153,22 +161,26 @@ DynamoDB (employeeData)
 
 Example:
 
-[https://your-api-id.execute-api.region.amazonaws.com/dev](https://your-api-id.execute-api.region.amazonaws.com/dev)
+https://your-api-id.execute-api.region.amazonaws.com/dev
 
 ---
 
-#  Step 6: Setup Frontend (S3)
+#  Step 7: Setup Frontend (S3)
 
-1. Go to S3 → Create Bucket
+---
+
+## Create Bucket
+
+1. Go to **S3 → Create Bucket**
 2. Disable **Block Public Access**
-3. Upload files:
+3. Upload:
 
    * index.html
    * scripts.js
 
 ---
 
-## Enable Static Hosting
+## Enable Static Website Hosting
 
 1. Go to **Properties → Static Website Hosting**
 2. Enable
@@ -197,7 +209,9 @@ Replace `<bucket-name>`:
 
 ---
 
-#  Step 7: Update API in scripts.js
+#  Step 8: Update API URL
+
+In `scripts.js`:
 
 ```javascript
 var API = "YOUR_API_INVOKE_URL";
@@ -207,10 +221,14 @@ var API = "YOUR_API_INVOKE_URL";
 
 #  Usage
 
-1. Open S3 Website URL
-2. Enter Employee Details
-3. Click **Save** → Data stored in DynamoDB
-4. Click **Load Employees** → Fetch all records
+1. Open S3 website URL
+2. Enter employee details
+3. Click:
+
+   * Save → Create
+   * Load Employees → Read
+   * Update → Modify data
+   * Delete → Remove employee
 
 ---
 
@@ -218,25 +236,9 @@ var API = "YOUR_API_INVOKE_URL";
 
 * Add Employee
 * View Employees
-* Serverless Architecture
-* Scalable & Cost Efficient
-
----
-
-#  Future Enhancements
-
 * Update Employee
 * Delete Employee
-* Search/Filter
-* AWS Cognito Authentication
-* Terraform (Infrastructure as Code)
-* CI/CD Pipeline
-
----
-
-#  Resume Line
-
-Built a serverless Employee Management System using AWS Lambda, API Gateway, DynamoDB, and S3 with REST APIs and static frontend hosting.
+* Serverless Architecture
 
 ---
 
@@ -247,8 +249,25 @@ employee-management/
 ├── scripts.js
 ├── insertEmployeeData.py
 ├── getEmployees.py
+├── updateEmployee.py
+├── deleteEmployee.py
 └── README.md
 
 ---
+
+#  Future Enhancements
+
+* Search Employee
+* Filter by Department
+* Pagination
+* AWS Cognito Authentication
+* Terraform Deployment
+* CI/CD Pipeline
+
+---
+
+#  Resume Line
+
+Developed a full CRUD Employee Management System using AWS Lambda, API Gateway, DynamoDB, and S3 with serverless architecture.
 
 ---
