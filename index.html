@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Management</title>
+</head>
+<body>
+
+<h2>Add Employee</h2>
+
+<input type="text" id="employeeId" placeholder="Employee ID"><br>
+<input type="text" id="name" placeholder="Name"><br>
+<input type="text" id="department" placeholder="Department"><br>
+<input type="text" id="salary" placeholder="Salary"><br>
+
+<button onclick="saveEmployee()">Save</button>
+
+<p id="msg"></p>
+
+<h2>All Employees</h2>
+<button onclick="getEmployees()">Load Employees</button>
+
+<table border="1" id="table">
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Department</th>
+<th>Salary</th>
+</tr>
+</table>
+
+<script src="scripts.js"></script>
+
+</body>
+</html>
