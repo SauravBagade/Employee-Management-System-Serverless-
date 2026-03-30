@@ -1,6 +1,6 @@
-# 🚀 AWS Serverless Employee Management System (AWS Setup Guide)
+#  AWS Serverless Employee Management System (AWS Setup Guide)
 
-## 📌 Overview
+##  Overview
 
 This document explains how to create a **serverless backend on AWS** using:
 
@@ -11,7 +11,7 @@ This document explains how to create a **serverless backend on AWS** using:
 
 ---
 
-# 🗃️ Step 1: Create DynamoDB Table
+#  Step 1: Create DynamoDB Table
 
 1. Go to **AWS Console**
 2. Navigate to **DynamoDB**
@@ -27,7 +27,7 @@ This document explains how to create a **serverless backend on AWS** using:
 
 ---
 
-# 🔐 Step 2: Create IAM Role for Lambda
+#  Step 2: Create IAM Role for Lambda
 
 1. Go to **IAM → Roles**
 2. Click **Create Role**
@@ -54,7 +54,7 @@ Lambda-DynamoDB-Role
 
 ---
 
-# 🧠 Step 3: Create Lambda Functions
+#  Step 3: Create Lambda Functions
 
 Create the following 4 Lambda functions:
 
@@ -101,7 +101,7 @@ Create the following 4 Lambda functions:
 
 ---
 
-# 🌐 Step 4: Create API Gateway (REST API)
+#  Step 4: Create API Gateway (REST API)
 
 1. Go to **API Gateway**
 2. Click **Create API**
@@ -131,7 +131,7 @@ Click **Create Resource**
 
 ---
 
-## ➤ Create Methods
+##  Create Methods
 
 Create the following methods under `/employees`:
 
@@ -169,7 +169,7 @@ Create the following methods under `/employees`:
 
 ---
 
-# ⚙️ Step 5: Enable CORS
+#  Step 5: Enable CORS
 
 1. Select `/employees`
 2. Click **Actions → Enable CORS**
@@ -200,7 +200,7 @@ Create the following methods under `/employees`:
 
 ---
 
-## 📌 Invoke URL
+##  Invoke URL
 
 After deployment, you will get:
 
@@ -210,7 +210,7 @@ https://<api-id>.execute-api.<region>.amazonaws.com/dev/employees
 
 ---
 
-# 🖥️ Step 7: Setup S3 (Frontend Hosting)
+#  Step 7: Setup S3 (Frontend Hosting)
 
 1. Go to **S3 → Create Bucket**
 
@@ -266,7 +266,7 @@ Upload:
 
 ---
 
-# 🧪 Step 8: Testing
+#  Step 8: Testing
 
 1. Open S3 website URL
 2. Perform operations:
@@ -278,7 +278,7 @@ Upload:
 
 ---
 
-# ⚠️ Common Issues & Fixes
+#  Common Issues & Fixes
 
 | Issue            | Solution               |
 | ---------------- | ---------------------- |
@@ -286,15 +286,6 @@ Upload:
 | CORS error       | Enable CORS + redeploy |
 | Lambda error     | Check CloudWatch logs  |
 | Data not showing | Verify API URL         |
-
----
-
-# 🚀 Future Improvements
-
-* Add AWS Cognito Authentication
-* Use Terraform for Infrastructure
-* Add CloudWatch Monitoring
-* Use CloudFront for HTTPS
 
 ---
 
