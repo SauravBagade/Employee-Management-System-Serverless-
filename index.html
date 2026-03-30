@@ -1,7 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8"> <!-- ✅ Fix encoding issue -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Management System</title>
+
     <style>
         body {
             font-family: Arial;
@@ -10,7 +13,7 @@
         }
 
         .container {
-            max-width: 600px;
+            max-width: 700px;
             margin: auto;
             background: #fff;
             padding: 20px;
@@ -47,6 +50,7 @@
 
         #msg {
             color: green;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -57,18 +61,22 @@
 
     <h2>Employee Management System</h2>
 
+    <!-- Inputs -->
     <input type="text" id="employeeId" placeholder="Employee ID">
     <input type="text" id="name" placeholder="Name">
     <input type="text" id="department" placeholder="Department">
     <input type="text" id="salary" placeholder="Salary">
 
+    <!-- Buttons -->
     <button onclick="saveEmployee()">Save</button>
     <button onclick="updateEmployee()">Update</button>
     <button onclick="deleteEmployee()">Delete</button>
     <button onclick="getEmployees()">Load Employees</button>
 
+    <!-- Message -->
     <p id="msg"></p>
 
+    <!-- Table -->
     <table id="table">
         <tr>
             <th>ID</th>
@@ -80,6 +88,7 @@
 
 </div>
 
+<!-- Script -->
 <script src="scripts.js"></script>
 
 </body>

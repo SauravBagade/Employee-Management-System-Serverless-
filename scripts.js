@@ -1,5 +1,6 @@
-// 🔗 Replace with your API Gateway Invoke URL
-var API = "YOUR_API_INVOKE_URL";
+// 🔗 API Gateway URL
+var API = "https://78252oc566.execute-api.us-east-1.amazonaws.com/dev/employees";
+
 
 // =====================
 // ✅ CREATE (POST)
@@ -22,26 +23,32 @@ function saveEmployee() {
     })
     .then(res => res.json())
     .then(() => {
-        document.getElementById("msg").innerText = "✅ Employee Saved!";
+        document.getElementById("msg").innerText = "Employee Saved!";
+        getEmployees(); // 🔥 auto refresh
     })
     .catch(() => {
-        document.getElementById("msg").innerText = "❌ Error saving employee";
+        document.getElementById("msg").innerText = "Error saving employee";
     });
 }
 
 
 // =====================
-// ✅ READ (GET)
+// ✅ READ (GET)  🔥 FIXED
 // =====================
 function getEmployees() {
 
     fetch(API)
     .then(res => res.json())
-    .then(data => {
+    .then(response => {
+
+        // 🔥 FIX: handle API response correctly
+        let data = typeof response.body === "string"
+            ? JSON.parse(response.body)
+            : response;
 
         let table = document.getElementById("table");
 
-        // Clear old data except header
+        // Reset table
         table.innerHTML = `
         <tr>
             <th>ID</th>
@@ -62,7 +69,7 @@ function getEmployees() {
         });
     })
     .catch(() => {
-        document.getElementById("msg").innerText = "❌ Error loading employees";
+        document.getElementById("msg").innerText = "Error loading employees";
     });
 }
 
@@ -88,10 +95,11 @@ function updateEmployee() {
     })
     .then(res => res.json())
     .then(() => {
-        document.getElementById("msg").innerText = "✏️ Employee Updated!";
+        document.getElementById("msg").innerText = "Employee Updated!";
+        getEmployees(); // 🔥 refresh
     })
     .catch(() => {
-        document.getElementById("msg").innerText = "❌ Error updating employee";
+        document.getElementById("msg").innerText = "Error updating employee";
     });
 }
 
@@ -114,9 +122,10 @@ function deleteEmployee() {
     })
     .then(res => res.json())
     .then(() => {
-        document.getElementById("msg").innerText = "🗑️ Employee Deleted!";
+        document.getElementById("msg").innerText = "Employee Deleted!";
+        getEmployees(); // 🔥 refresh
     })
     .catch(() => {
-        document.getElementById("msg").innerText = "❌ Error deleting employee";
+        document.getElementById("msg").innerText = "Error deleting employee";
     });
 }

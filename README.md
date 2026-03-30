@@ -1,203 +1,260 @@
-#  Employee Management System (AWS Serverless - FULL CRUD)
+# 🚀 AWS Serverless Employee Management System (AWS Setup Guide)
 
-A fully serverless web application to perform **CRUD operations (Create, Read, Update, Delete)** on employee data using:
+## 📌 Overview
 
-* AWS Lambda
-* API Gateway
-* DynamoDB
-* S3 Static Website Hosting
+This document explains how to create a **serverless backend on AWS** using:
 
----
-
-#  Architecture
-
-Frontend (HTML/JS - S3)
-⬇
-API Gateway (REST API)
-⬇
-Lambda Functions (CRUD)
-⬇
-DynamoDB (employeeData)
-
----
-
-#  Services Used
-
+* Amazon DynamoDB
 * AWS Lambda
 * Amazon API Gateway
-* Amazon DynamoDB
-* Amazon S3
-* IAM (Roles & Permissions)
+* Amazon S3 (for hosting frontend)
 
 ---
 
-#  Step 1: Create DynamoDB Table
+# 🗃️ Step 1: Create DynamoDB Table
 
-1. Go to **AWS Console → DynamoDB**
+1. Go to **AWS Console**
+2. Navigate to **DynamoDB**
+3. Click **Create Table**
 
-2. Click **Create Table**
+### Configuration:
 
-3. Enter:
-
-   * Table Name: `employeeData`
-   * Partition Key: `employeeId` (String)
+* Table Name: `employeeData`
+* Partition Key: `employeeId` (String)
+* Keep default settings
 
 4. Click **Create Table**
 
 ---
 
-#  Step 2: Create IAM Role for Lambda
+# 🔐 Step 2: Create IAM Role for Lambda
 
-1. Go to **IAM → Roles → Create Role**
+1. Go to **IAM → Roles**
+2. Click **Create Role**
 
-2. Select:
+### Select:
 
-   * Trusted Entity: AWS Service
-   * Use Case: Lambda
+* Trusted Entity: **AWS Service**
+* Use Case: **Lambda**
 
-3. Attach Policies:
+3. Click **Next**
 
-   * AmazonDynamoDBFullAccess
-   * AWSLambdaBasicExecutionRole
+### Attach Permissions:
 
-4. Role Name: `Lambda-DynamoDB-Role`
+* `AmazonDynamoDBFullAccess`
+* `AWSLambdaBasicExecutionRole`
+
+4. Role Name:
+
+```text
+Lambda-DynamoDB-Role
+```
 
 5. Click **Create Role**
 
 ---
 
-#  Step 3: Create Lambda Functions
+# 🧠 Step 3: Create Lambda Functions
+
+Create the following 4 Lambda functions:
 
 ---
 
-##  1. Create Employee (POST)
+## 1️⃣ Insert Employee
 
-* Function Name: `insertEmployeeData`
+* Name: `insertEmployeeData`
 * Runtime: Python 3.x
-* Role: `Lambda-DynamoDB-Role`
+* Architecture: x86_64
+* Execution Role: `Lambda-DynamoDB-Role`
 
- Upload code from: `insertEmployeeData.py`
- Click **Deploy**
-
----
-
-##  2. Get Employees (GET)
-
-* Function Name: `getEmployees`
-
- Upload code from: `getEmployees.py`
- Deploy
+👉 Deploy the function code
 
 ---
 
-##  3. Update Employee (PUT)
+## 2️⃣ Get Employees
 
-* Function Name: `updateEmployee`
+* Name: `getEmployees`
+* Runtime: Python 3.x
+* Role: Same IAM role
 
- Upload code from: `updateEmployee.py`
- Deploy
-
----
-
-##  4. Delete Employee (DELETE)
-
-* Function Name: `deleteEmployee`
-
- Upload code from: `deleteEmployee.py`
- Deploy
+👉 Deploy the function code
 
 ---
 
-#  Step 4: Create API Gateway
+## 3️⃣ Update Employee
 
-1. Go to **API Gateway → Create API**
-2. Choose **REST API → Build**
-3. API Name: `employee-api`
-4. Click **Create API**
+* Name: `updateEmployee`
+* Runtime: Python 3.x
+* Role: Same IAM role
 
----
-
-##  Add Methods
-
-| Method | Lambda             |
-| ------ | ------------------ |
-| POST   | insertEmployeeData |
-| GET    | getEmployees       |
-| PUT    | updateEmployee     |
-| DELETE | deleteEmployee     |
-
-### Steps:
-
-1. Select **Resources → Actions → Create Method**
-2. Choose method (POST/GET/PUT/DELETE)
-3. Integration Type: **Lambda**
-4. Select respective Lambda
-5. Click **Save**
+👉 Deploy the function code
 
 ---
 
-#  Step 5: Enable CORS
+## 4️⃣ Delete Employee
 
-1. Select resource `/`
+* Name: `deleteEmployee`
+* Runtime: Python 3.x
+* Role: Same IAM role
 
+👉 Deploy the function code
+
+---
+
+# 🌐 Step 4: Create API Gateway (REST API)
+
+1. Go to **API Gateway**
+2. Click **Create API**
+3. Choose **REST API → Build**
+
+---
+
+## API Configuration
+
+* API Name: `employee-api`
+* Endpoint Type: Regional
+
+Click **Create API**
+
+---
+
+## ➤ Create Resource
+
+1. Click **Actions → Create Resource**
+
+### Enter:
+
+* Resource Name: `employees`
+* Resource Path: `/employees`
+
+Click **Create Resource**
+
+---
+
+## ➤ Create Methods
+
+Create the following methods under `/employees`:
+
+---
+
+### 🔹 GET Method
+
+* Integration Type: Lambda
+* Lambda Function: `getEmployees`
+* Enable: ✅ Lambda Proxy Integration
+
+---
+
+### 🔹 POST Method
+
+* Integration Type: Lambda
+* Lambda Function: `insertEmployeeData`
+* Enable: ✅ Lambda Proxy Integration
+
+---
+
+### 🔹 PUT Method
+
+* Integration Type: Lambda
+* Lambda Function: `updateEmployee`
+* Enable: ✅ Lambda Proxy Integration
+
+---
+
+### 🔹 DELETE Method
+
+* Integration Type: Lambda
+* Lambda Function: `deleteEmployee`
+* Enable: ✅ Lambda Proxy Integration
+
+---
+
+# ⚙️ Step 5: Enable CORS
+
+1. Select `/employees`
 2. Click **Actions → Enable CORS**
 
-3. Enable for:
+### Allow:
 
-   * GET
-   * POST
-   * PUT
-   * DELETE
+* Methods: GET, POST, PUT, DELETE
+* Headers: Default
+* Origin:
 
-4. Confirm changes
+```text
+*
+```
+
+3. Click **Enable CORS and replace existing headers**
 
 ---
 
-#  Step 6: Deploy API
+# 🚢 Step 6: Deploy API
 
 1. Click **Actions → Deploy API**
-2. Stage Name: `dev`
-3. Copy **Invoke URL**
 
-Example:
+### Configuration:
 
-https://your-api-id.execute-api.region.amazonaws.com/dev
+* Stage Name: `dev`
 
----
-
-#  Step 7: Setup Frontend (S3)
+2. Click **Deploy**
 
 ---
 
-## Create Bucket
+## 📌 Invoke URL
+
+After deployment, you will get:
+
+```text
+https://<api-id>.execute-api.<region>.amazonaws.com/dev/employees
+```
+
+---
+
+# 🖥️ Step 7: Setup S3 (Frontend Hosting)
 
 1. Go to **S3 → Create Bucket**
-2. Disable **Block Public Access**
-3. Upload:
 
-   * index.html
-   * scripts.js
+### Configuration:
+
+* Bucket Name: `employee-management-frontend`
+* Region: Same as API
+
+---
+
+## Disable Public Access
+
+* Uncheck **Block all public access**
+* Acknowledge warning
+
+---
+
+## Upload Files
+
+Upload:
+
+* `index.html`
+* `scripts.js`
 
 ---
 
 ## Enable Static Website Hosting
 
-1. Go to **Properties → Static Website Hosting**
-2. Enable
-3. Index Document: `index.html`
+1. Go to **Properties**
+2. Enable **Static Website Hosting**
+
+### Configuration:
+
+* Index Document: `index.html`
 
 ---
 
 ## Add Bucket Policy
-
-Replace `<bucket-name>`:
 
 ```json
 {
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "PublicRead",
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
@@ -209,65 +266,40 @@ Replace `<bucket-name>`:
 
 ---
 
-#  Step 8: Update API URL
-
-In `scripts.js`:
-
-```javascript
-var API = "YOUR_API_INVOKE_URL";
-```
-
----
-
-#  Usage
+# 🧪 Step 8: Testing
 
 1. Open S3 website URL
-2. Enter employee details
-3. Click:
+2. Perform operations:
 
-   * Save → Create
-   * Load Employees → Read
-   * Update → Modify data
-   * Delete → Remove employee
-
----
-
-#  Features
-
-* Add Employee
-* View Employees
-* Update Employee
-* Delete Employee
-* Serverless Architecture
+   * Add Employee
+   * View Employees
+   * Update Employee
+   * Delete Employee
 
 ---
 
-#  Project Structure
+# ⚠️ Common Issues & Fixes
 
-employee-management/
-├── index.html
-├── scripts.js
-├── insertEmployeeData.py
-├── getEmployees.py
-├── updateEmployee.py
-├── deleteEmployee.py
-└── README.md
+| Issue            | Solution               |
+| ---------------- | ---------------------- |
+| API not working  | Deploy API again       |
+| CORS error       | Enable CORS + redeploy |
+| Lambda error     | Check CloudWatch logs  |
+| Data not showing | Verify API URL         |
 
 ---
 
-#  Future Enhancements
+# 🚀 Future Improvements
 
-* Search Employee
-* Filter by Department
-* Pagination
-* AWS Cognito Authentication
-* Terraform Deployment
-* CI/CD Pipeline
+* Add AWS Cognito Authentication
+* Use Terraform for Infrastructure
+* Add CloudWatch Monitoring
+* Use CloudFront for HTTPS
 
 ---
 
-#  Resume Line
+# 👨‍💻 Author
 
-Developed a full CRUD Employee Management System using AWS Lambda, API Gateway, DynamoDB, and S3 with serverless architecture.
+**Saurav Bagade**
 
 ---
